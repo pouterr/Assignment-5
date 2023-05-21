@@ -25,20 +25,38 @@ public class BST<K extends Comparable<K>, V>{
         return size;
     }
     public void put(K key, V value) {
-        root = put(root, key, value);
+        if (root == null) {
+            root = new Node(key, value);
+            size++;
+        } else {
+            Node current = root;
+            while (true) {
+                int cmp = key.compareTo(current.key);
+                if (cmp < 0) {
+                    if (current.left == null) {
+                        current.left = new Node(key, value);
+                        size++;
+                        return;
+                    } else {
+                        current = current.left;
+                    }
+                } else if (cmp > 0) {
+                    if (current.right == null) {
+                        current.right = new Node(key, value);
+                        size++;
+                        return;
+                    } else {
+                        current = current.right;
+                    }
+                } else {
+                    // Update the value if key already exists
+                    current.val = value;
+                    return;
+                }
+            }
+        }
     }
 
-    private Node put(Node x, K key, V val) {
-        if (x == null) {
-            size++;
-            return new Node(key, val);
-        }
-        int cmp = key.compareTo(x.key);
-        if (cmp < 0) x.left = put(x.left, key, val);
-        else if (cmp > 0) x.right = put(x.right, key, val);
-        else x.val = val;
-        return x;
-    }
 
     public V get(K key) {
         Node x = root;
@@ -51,7 +69,11 @@ public class BST<K extends Comparable<K>, V>{
         return null;
     }
 
-    public void delete(K key){
+    public void delete(K key) {
+        root = delete(root, key);
+    }
+
+    private Node delete(Node x, K key) {
 
     }
 
