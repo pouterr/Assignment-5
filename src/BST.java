@@ -11,6 +11,16 @@ public class BST<K extends Comparable<K>, V>{
         }
     }
 
+    public class KeyValue {
+        public K key;
+        public V value;
+
+        public KeyValue(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
     public int size() {
         return size;
     }
