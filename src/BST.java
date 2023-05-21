@@ -70,8 +70,80 @@ public class BST<K extends Comparable<K>, V>{
     }
 
     public void delete(K key) {
-        root = delete(root, key);
+        Node parent = null;
+        Node current = root;
+        boolean hasTwoChildren = false;
+        while (current != null) {
+            int cmp = key.compareTo(current.key);
+            if (cmp < 0) {
+                parent = current;
+                current = current.left;
+            } else if (cmp > 0) {
+                parent = current;
+                current = current.right;
+            } else {
+                // Case 1: node to be deleted has no children
+                if (current.left == null && current.right == null) {
+                    if (parent == null) { // If node to delete is root
+                        root = null;
+                    } else if (parent.left == current) {
+                        parent.left = null;
+                    } else {
+                        parent.right = null;
+                    }
+                }
+                // Case 2: node to be deleted has one child
+                else if (current.left == null) {
+                    if (parent == null) { // If node to delete is root
+                        root = current.right;
+                    } else if (parent.left == current) {
+                        parent.left = current.right;
+                    } else {
+                        parent.right = current.right;
+                    }
+                } else if (current.right == null) {
+                    if (parent == null) { // If node to delete is root
+                        root = current.left;
+                    } else if (parent.left == current) {
+                        parent.left = current.left;
+                    } else {
+                        parent.right = current.left;
+                    }
+                }
+                // Case 3: node to be deleted has two children
+                else {
+                    hasTwoChildren = true;
+                }
+
+                if (!hasTwoChildren) {
+                    size--;
+                    return;
+                }
+
+                // Find min node in right subtree
+                Node minParent = current;
+                Node min = current.right;
+                while (min.left != null) {
+                    minParent = min;
+                    min = min.left;
+                }
+
+                // Replace current's key and value with min's
+                current.key = min.key;
+                current.val = min.val;
+
+                // Remove min node
+                if (minParent.left == min) {
+                    minParent.left = min.right;
+                } else {
+                    minParent.right = min.right;
+                }
+                size--;
+                return;
+            }
+        }
     }
+
 
     private Node delete(Node x, K key) {
 
