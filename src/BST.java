@@ -7,18 +7,19 @@ import java.util.List;
  * @param <K> Key - unique identifier for each Node
  * @param <V> Value - data to be associated with a given key
  */
-public class BST<K extends Comparable<K>, V>{
+public class BST<K extends Comparable<K>, V> {
     private Node root;
     private int size;
 
     /**
      * Inner class for Node
      */
-    private class Node{
+    private class Node {
         private K key;
         private V val;
-        private Node left,right;
-        public Node(K key,V val){
+        private Node left, right;
+
+        public Node(K key, V val) {
             this.key = key;
             this.val = val;
         }
@@ -210,6 +211,26 @@ public class BST<K extends Comparable<K>, V>{
         inorder(x.left, pairs);
         pairs.add(new KeyValue(x.key, x.val));
         inorder(x.right, pairs);
+    }
+
+    public boolean contains(V value) {
+        return contains(root, value);
+    }
+
+    private boolean contains(Node node, V value) {
+        if (node == null) {
+            return false;
+        }
+
+        int cmp = ((Comparable<V>) value).compareTo(node.val);
+
+        if (cmp < 0) {
+            return contains(node.left, value);
+        } else if (cmp > 0) {
+            return contains(node.right, value);
+        } else {
+            return true;
+        }
     }
 
 
